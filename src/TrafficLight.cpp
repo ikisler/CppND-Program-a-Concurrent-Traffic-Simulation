@@ -103,7 +103,7 @@ void TrafficLight::cycleThroughPhases()
 
 int TrafficLight::calculateCycleLength()
 {
-    std::default_random_engine randomGenerator;
+    std::default_random_engine randomGenerator(std::random_device{}());
     std::uniform_int_distribution<int> distribution(TrafficLight::MIN_CYCLE_TIME_SECONDS, TrafficLight::MAX_CYCLE_TIME_SECONDS);
     return distribution(randomGenerator);
 }
