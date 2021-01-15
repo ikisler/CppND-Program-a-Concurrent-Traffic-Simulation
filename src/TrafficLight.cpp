@@ -72,13 +72,13 @@ void TrafficLight::cycleThroughPhases()
     // Also, the while-loop should use std::this_thread::sleep_for to wait 1ms between two cycles. 
 
     std::chrono::time_point<std::chrono::system_clock> lastUpdateTimeStamp = std::chrono::system_clock::now();
-    int lightCycleDuration = calculateCycleLength();
+    double lightCycleDuration = calculateCycleLength();
 
     while (true)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
-        long timeSinceLightPhaseChanged = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - lastUpdateTimeStamp).count();
+        long timeSinceLightPhaseChanged = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastUpdateTimeStamp).count();
 
         if (timeSinceLightPhaseChanged >= lightCycleDuration)
         {
@@ -101,10 +101,11 @@ void TrafficLight::cycleThroughPhases()
     }
 }
 
-int TrafficLight::calculateCycleLength()
+double TrafficLight::calculateCycleLength()
 {
     std::default_random_engine randomGenerator(std::random_device{}());
     std::uniform_int_distribution<int> distribution(TrafficLight::MIN_CYCLE_TIME_SECONDS, TrafficLight::MAX_CYCLE_TIME_SECONDS);
-    return distribution(randomGenerator);
+    // Convert to milliseconds
+    return distribution(randomGenerator) * 1000;
 }
 
